@@ -56,6 +56,7 @@ public class Percent extends JFrame implements ActionListener, MouseMotionListen
 		InnerPanel jp = new InnerPanel();
 		
 		jp.setPreferredSize(new Dimension(500, 500));
+		jp.repaint();
 		
 		me.getContentPane().add(jp);
 
@@ -67,6 +68,7 @@ public class Percent extends JFrame implements ActionListener, MouseMotionListen
 	
 	public Percent()
 	{
+		setVisible(false);
 		makeSquare();
 	}
 
@@ -87,6 +89,7 @@ public class Percent extends JFrame implements ActionListener, MouseMotionListen
 		// Move the window
 		setLocation(x, y);
 		setResizable(false);
+		setVisible(true);
 	}
 
 	@Override
@@ -130,14 +133,34 @@ public class Percent extends JFrame implements ActionListener, MouseMotionListen
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-//		printOldSchool();
 		percent = getPercent();
+		repaint();
 
 	}
 	
 	public float getPercent()
 	{
-		return 0;
+		float count = 0; 
+		float targetcount = 0;
+		
+		for (int x=0; x<500; x++)
+			for (int y=0; y<500; y++)
+				if (target[x][y]==1)
+				{
+					for (int i=0; i<20; i++)
+						for (int j=0; j<20; j++)
+							if (coor[x+i][y+j] == 1)
+							{
+								count++;
+								i=99;
+								break;
+							}
+					targetcount++;
+				}
+		
+//		System.out.println(count/250000);
+				
+		return count/targetcount;
 	}
 
 	static class InnerPanel extends JPanel
