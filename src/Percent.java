@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.Serializable;
 
 import javax.swing.JFrame;
@@ -13,11 +14,9 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 
-public class Percent extends JFrame implements ActionListener, MouseListener
+public class Percent extends JFrame implements ActionListener, MouseMotionListener, MouseListener
 {
 	static int[][] coor = new int[500][500];
-	static Timer timer;
-	static int interval = 10;
 
 	@Override
 	public void actionPerformed(ActionEvent e) 
@@ -36,13 +35,13 @@ public class Percent extends JFrame implements ActionListener, MouseListener
 		me.getContentPane().add(jp);
 
 		me.addMouseListener(me);	// I am my own mouse listener
+		me.addMouseMotionListener(me);
 
 		me.popup();
 	}
 	
 	public Percent()
 	{
-		timer = new Timer(interval, this);
 	}
 
 	public void popup(){
@@ -85,8 +84,7 @@ public class Percent extends JFrame implements ActionListener, MouseListener
 	@Override
 	public void mousePressed(MouseEvent arg0) 
 	{
-		timer.start();
-		coor[arg0.getX()][arg0.getY()] = 1;
+		streak(arg0.getX(), arg0.getY());
 	}
 	
 
@@ -103,8 +101,27 @@ public class Percent extends JFrame implements ActionListener, MouseListener
 			for (int x=0; x<coor.length; x++)
 				for (int y=0; y<coor[0].length; y++)
 					if (coor[x][y] == 1)
-						g.drawRect(x, y, 1, 1);
+						g.fillOval(x-5, y-30, 20, 20);
 		}
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) 
+	{
+		streak(arg0.getX(), arg0.getY());
+		
+	}
+	
+	public void streak(int x, int y)
+	{
+		coor[x][y] = 1;
+		repaint();
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
