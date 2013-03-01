@@ -1,4 +1,6 @@
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -17,12 +19,35 @@ import javax.swing.Timer;
 public class Percent extends JFrame implements ActionListener, MouseMotionListener, MouseListener
 {
 	static int[][] coor = new int[500][500];
+	static int[][] target = new int[500][500];
+	static float percent;
 
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
 		
 
+	}
+	
+	public void makeSquare()
+	{
+		// top line
+		for (int x=100; x<400; x++)
+			target[x][100] = 1;
+		
+		// bottom line
+		for (int x=100; x<400; x++)
+			target[x][400] = 1;
+		
+		// left line
+		for (int x=100; x<400; x++)
+			target[100][x] = 1;
+		
+		// right line
+		for (int x=100; x<400; x++)
+			target[400][x] = 1;
+		
+				
 	}
 
 	public static void main (String[] args)
@@ -42,6 +67,7 @@ public class Percent extends JFrame implements ActionListener, MouseMotionListen
 	
 	public Percent()
 	{
+		makeSquare();
 	}
 
 	public void popup(){
@@ -77,8 +103,22 @@ public class Percent extends JFrame implements ActionListener, MouseMotionListen
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 
+	}
+	
+	public void printOldSchool()
+	{
+		for (int x=0; x<coor.length; x++)
+		{
+			for (int y=0; y<coor[0].length; y++)
+				if (coor[x][y] == 1)
+					System.out.print("#");
+				else
+					System.out.print(" ");
+			
+			System.out.print("\n");
+		}
+		
 	}
 
 	@Override
@@ -90,18 +130,49 @@ public class Percent extends JFrame implements ActionListener, MouseMotionListen
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+//		printOldSchool();
+		percent = getPercent();
 
+	}
+	
+	public float getPercent()
+	{
+		return 0;
 	}
 
 	static class InnerPanel extends JPanel
 	{
+		InnerPanel()
+		{
+			super();
+			setBackground(Color.black);
+			
+		}
 		public void paintComponent(Graphics g)
 		{
+			super.paintComponent(g);
+
 			for (int x=0; x<coor.length; x++)
 				for (int y=0; y<coor[0].length; y++)
+				{
+					g.setColor(Color.green);
+					if (target[x][y] == 1)
+						g.drawOval(x-5, y-30, 20, 20);
+				}
+			
+			for (int x=0; x<coor.length; x++)
+				for (int y=0; y<coor[0].length; y++)
+				{
+					g.setColor(Color.red);
 					if (coor[x][y] == 1)
 						g.fillOval(x-5, y-30, 20, 20);
+				}
+					
+			Font f = new Font ("Helvetica", Font.BOLD, 14);
+		      g.setFont(f);
+		      
+			g.setColor(Color.white);
+			g.drawString("Matching: "+(int)(percent*100)+"%", 10, 20);
 		}
 	}
 
